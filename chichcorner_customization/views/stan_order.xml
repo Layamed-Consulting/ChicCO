@@ -11,6 +11,7 @@
                     <field name="identite_number" readonly="1"/>
                     <field name="cheque_number" readonly="1"/>
                     <field name="banque" readonly="1"/>
+                    <field name="cheque_date" readonly="1"/>
                 </xpath>
             </field>
         </record>

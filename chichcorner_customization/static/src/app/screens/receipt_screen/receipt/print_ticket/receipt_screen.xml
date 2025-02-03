@@ -7,5 +7,7 @@
                 <i class="fa fa-gift ms-2" t-ref="order-print-receipt-button-gift"></i> Print Gift Receipt
             </button>
         </xpath>
+
     </t>
 </templates>
+

@@ -21,12 +21,19 @@
         'views/product_view.xml',
         'report/report_product_label.xml',
         'report/purchase_order_inherit.xml',
-        #'report/print_accounting.xml',
         'views/stan_order.xml',
         'views/pos_payment_screen.xml',
-        #'views/pos_payment_stan_view.xml',
         'views/pos_order_vendor.xml',
         'views/transaction_menu.xml',
+
+        'report/bon_de_sortie_report.xml',
+        'report/bon_de_sortie_template.xml',
+        'report/bon_de_sortie_template_print.xml',
+        'report/sale_report.xml',
+        'views/report_template.xml',
+        'views/product_view_inh.xml',
+        #'report/print_accounting.xml',
+        #'views/pos_payment_stan_view.xml',
         #'views/pos_payment_methode.xml',
         #'views/account_journal.xml',
         #'views/pos_payment_stan.xml',
@@ -35,8 +42,15 @@
         # 'report/report_view.xml'
     ],
     'assets': {
+        'web.assets_backend': [
+            'chichcorner_customization/static/src/models/barcode_picking.js',
+        ],
         'point_of_sale._assets_pos': [
-            'chichcorner_customization/static/src/**/*',
+           'chichcorner_customization/static/src/app/**/*',
+        ],
+        'web.report_assets_common': [
+            'chichcorner_customization/static/src/css/report.css',
+            'chichcorner_customization/static/src/css/bonsortie.css',
         ],
     },
     'demo': [],

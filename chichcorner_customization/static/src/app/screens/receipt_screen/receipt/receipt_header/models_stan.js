@@ -9,6 +9,7 @@ patch(Order.prototype, {
         this.identite_number = this.identite_number || null;
         this.cheque_number = this.cheque_number || null;
         this.banque = this.banque || null;
+        this.cheque_date = this.cheque_date || null;
     },
     init_from_JSON(json) {
         this.set_stan(json.stan);
@@ -16,6 +17,7 @@ patch(Order.prototype, {
         this.set_cheque_number(json.cheque_number);
         this.set_banque_name(json.banque);
         super.init_from_JSON(...arguments);
+        this.set_cheque_date(json.cheque_date);
     },
     export_as_JSON() {
         const json = super.export_as_JSON(...arguments);
@@ -24,6 +26,7 @@ patch(Order.prototype, {
             json.identite_number = this.get_identite_number();
             json.cheque_number = this.get_cheque_number();
             json.banque = this.get_banque_name();
+            json.cheque_date = this.get_cheque_date();
         }
         return json;
     },
@@ -35,6 +38,12 @@ patch(Order.prototype, {
     },
     set_identite_number(identite_number) {
         this.identite_number = identite_number;
+    },
+    set_cheque_date(cheque_date) {
+        this.cheque_date = cheque_date;
+    },
+     get_cheque_date() {
+        return this.cheque_date;
     },
 
     get_identite_number() {

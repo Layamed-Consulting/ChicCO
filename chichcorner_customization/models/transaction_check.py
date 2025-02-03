@@ -19,10 +19,10 @@ class TransactionCheck(models.Model):
         domain=[('id', '!=', False)]
     )
     status = fields.Selection([
-        ('draft', 'Draft'),
+        ('concrétiser', 'Concrétisé'),
         ('done', 'Done'),
-        ('cancel', 'Cancelled')
-    ], string="Status", default='draft')
+        ('comptabilisé', 'Comptabilisé')
+    ], string="Status", default='done')
 
     transaction_ids = fields.One2many("transaction.session", "check_id", string="Relevés")
 

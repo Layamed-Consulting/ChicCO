@@ -29,6 +29,9 @@ class PosOrder(models.Model):
     ('ko', 'KO'),
   ], string="Status", default="ok")
 
+  cheque_date = fields.Date(string="Date du Chèque", help="Date of the cheque.")
+
+
   def _order_fields(self, ui_order):
     result = super()._order_fields(ui_order)
     _logger.debug("UI Order: %s", ui_order)
@@ -37,6 +40,7 @@ class PosOrder(models.Model):
     result['identite_number'] = ui_order.get('identite_number')
     result['cheque_number'] = ui_order.get('cheque_number')
     result['banque'] = ui_order.get('banque')
+    result['cheque_date'] = ui_order.get('cheque_date')
     return result
 
 
