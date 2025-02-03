@@ -1,21 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <template id="report_delivery_document_inherit" inherit_id="stock.report_delivery_document">
-
-        <xpath expr="//table[@name='stock_backorder_table']/tbody" position="inside">
-        <tr>
-            <td><strong>Quantité totale</strong></td>
-            <td></td>
+        <!-- done -->
+        <xpath expr="//p[@class='mt-5']" position="before">
+            <table class="table table-sm mt-1">
+                <tbody>
+                <tr class="border-top">
+                    <td style="width: 68%;"><strong>Quantité totale</strong></td>
+                    <td style="width: 16%; text-align: center;">
+                        <t t-set="total_ordered" t-value="sum(move.product_uom_qty for move in o.move_ids.filtered(lambda x: x.product_uom_qty)) + sum(backorder.product_uom_qty for backorder in o.backorder_ids.mapped('move_ids').filtered(lambda x: x.product_uom_qty))"/>
+                        <strong>
+                            <span t-esc="'%.2f' % (total_ordered or 0)"/>
+                            <span t-field="o.move_ids[0].product_uom"/>
+                        </strong>
+                    </td>
+                    <td style="width: 16%; text-align: center;">
+                        <t t-set="total_delivered" t-value="sum(move.quantity for move in o.move_ids.filtered(lambda x: x.product_uom_qty))"/>
+                        <strong>
+                            <span t-esc="'%.2f' % (total_delivered or 0)"/>
+                            <span t-field="o.move_ids[0].product_uom"/>
+                        </strong>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </xpath>
+        <!-- Add new column header -->
+        <xpath expr="//table[@name='stock_backorder_table']/thead/tr" position="inside">
+            <th name="th_sm_original"><strong>Commandé</strong></th>
+        </xpath>
+        <!-- Add new column data -->
+        <xpath expr="//table[@name='stock_backorder_table']/tbody/tr" position="inside">
             <td class="text-center">
-                <span t-esc="sum(backorders.mapped('move_ids').mapped('product_uom_qty')) * -1" />
-                <span t-field="backorders.mapped('move_ids')[0].product_uom" />
+                <t t-set="backorder_qty" t-value="sum(o.backorder_ids.mapped('move_ids').filtered(lambda m: m.product_id == bo_line.product_id).mapped('product_uom_qty'))"/>
+                <t t-set="original_qty" t-value="sum(o.move_ids.filtered(lambda m: m.product_id == bo_line.product_id).mapped('product_uom_qty')) + backorder_qty"/>
+                <span t-esc="'%.2f' % original_qty"/>
+                <span t-field="bo_line.product_uom"/>
             </td>
-        </tr>
+
+            <td class="text-center">
+                <!-- Calculate the Ecart -->
+                <t t-set="backorder_qty" t-value="sum(o.backorder_ids.mapped('move_ids').filtered(lambda m: m.product_id == bo_line.product_id).mapped('product_uom_qty'))"/>
+                <t t-set="original_qty" t-value="sum(o.move_ids.filtered(lambda m: m.product_id == bo_line.product_id).mapped('product_uom_qty')) + backorder_qty"/>
+                <t t-set="ecart" t-value="bo_line.product_uom_qty - original_qty"/>
+                <span t-esc="'%.2f' % ecart"/>
+                <span t-field="bo_line.product_uom"/>
+            </td>
+        </xpath>
+         <!-- Add Ecart column -->
+        <xpath expr="//table[@name='stock_backorder_table']/thead/tr" position="inside">
+            <th name="th_sm_ecart"><strong>Ecart</strong></th>
+        </xpath>
+
+        <xpath expr="//table[@name='stock_backorder_table']/tbody" position="after">
+            <tfoot>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td></td> <!-- Empty for alignment -->
+                    <td class="text-center">
+                        <!-- Total Backorder Quantity -->
+                        <t t-set="total_backorder_qty" t-value="sum(backorders.mapped('move_ids').filtered(lambda x: x.product_uom_qty).mapped('product_uom_qty')) * -1"/>
+                        <span t-esc="'%.2f' % total_backorder_qty"/>
+                    </td>
+                   <td class="text-center">
+                    <!-- Total Original Quantity
+                        <t t-set="backorder_qty" t-value="sum(o.backorder_ids.mapped('move_ids').filtered(lambda m: m.product_id == bo_line.product_id).mapped('product_uom_qty'))"/>
+                       <t t-set="original_qty" t-value="sum(o.move_ids.filtered(lambda m: m.product_id == bo_line.product_id).mapped('product_uom_qty')) + backorder_qty"/>
+                       <t t-set="total_original_qty" t-value="sum(o.move_ids.mapped('product_uom_qty')) + original_qty"/>
+                        <span t-esc="'%.2f' % total_original_qty"/>-->
+                    </td>
+                    <td class="text-center">
+                        <!-- Total Ecart
+                        <t t-set="total_ecart" t-value="sum(backorders.mapped('move_ids').filtered(lambda x: x.product_uom_qty).mapped('product_uom_qty')) - sum(o.move_ids.mapped('product_uom_qty'))"/>
+                        <span t-esc="'%.2f' % total_ecart"/>-->
+                    </td>
+                </tr>
+            </tfoot>
         </xpath>
 
         <xpath expr="//div[@class='page']" position="inside">
                 <div t-if="o.move_ids.filtered(lambda x: x.quantity > x.product_uom_qty)">
-                    <p class="mt-5">
+                    <p class="mt-2">
                         <span>Il y a quelques produits en plus de ce que vous avez commandé :</span>
                     </p>
                     <table class="table table-sm" name="over_delivered_tables" style="table-layout: fixed;">

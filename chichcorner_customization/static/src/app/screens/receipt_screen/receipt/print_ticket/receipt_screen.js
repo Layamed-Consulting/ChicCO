@@ -10,6 +10,19 @@ patch(ReceiptScreen.prototype, {
         this.printer = useService("printer");
     },
 
+    /*
+    const report = await this.env.pos.proxy.printer.print_receipt('loyalty.gift_card_report', {
+                data: reportData,
+            });
+
+            // Print the report directly
+            if (report.successful) {
+                await this.showTempScreen('ReceiptScreen', {
+                    report: report.receipt,
+                });
+            }
+
+     */
 async printGiftReceipt() {
         let giftReceiptData;
         try {
@@ -20,6 +33,7 @@ async printGiftReceipt() {
 
             const receiptData = order.export_for_printing();
             giftReceiptData = { ...receiptData };
+
 
             giftReceiptData.orderlines = receiptData.orderlines.map(line => ({
                 ...line,
@@ -40,6 +54,7 @@ async printGiftReceipt() {
                 tax: "",
                 discount: Number(line.discount) || "0"
             }));
+
 
             const zeroFields = [
                 'price',
@@ -75,7 +90,6 @@ async printGiftReceipt() {
             }
             return this.env.utils.formatCurrency(value);
             };
-
 
             const tempContainer = document.createElement('div');
             tempContainer.className = 'pos-receipt-container';
