@@ -5,10 +5,42 @@ async function printAttachment(env, action) {
     try {
         if (action && action.params && action.params.html) {
             const reportHtml = action.params.html;
-            console.log("Printing report from HTML content");
 
             const userAgent = navigator.userAgent || "";
             const isAndroid = /Android|iPhone|iPad|iPod/i.test(userAgent);
+
+
+            const printStyles = `
+                
+                <style>
+                    @media print {
+                        @page {
+                            size: 49mm 29mm;
+                            margin: 0mm;
+                        }
+                        body {
+                            margin: 0;
+                            padding: 5mm;
+                            width: 100%;
+                            height: 100%;
+                        }
+                        .print-content {
+                   
+                            scale: 0.8;
+                            transform-origin: top left;
+                              
+                        }
+                    }
+                </style>
+                
+            `;
+
+            const modifiedHtml = `
+                ${printStyles}
+                <div class="print-content">
+                    ${reportHtml}
+                </div>
+            `;
 
             if (isAndroid) {
                 console.log("Android detected: Opening report in a new tab.");
@@ -17,13 +49,14 @@ async function printAttachment(env, action) {
                     console.warn("Popup blocked! Enable popups to print automatically.");
                     return;
                 }
+
                 newWindow.document.open();
-                newWindow.document.write(reportHtml);
+                newWindow.document.write(modifiedHtml);
                 newWindow.document.close();
                 newWindow.print();
+
                 return;
             }
-
 
             let iframe = document.getElementById("printIframe");
             if (!iframe) {
@@ -37,8 +70,9 @@ async function printAttachment(env, action) {
             }
 
             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
             iframeDoc.open();
-            iframeDoc.write(reportHtml);
+            iframeDoc.write(modifiedHtml);
             iframeDoc.close();
 
             iframe.onload = function () {
