@@ -22,7 +22,9 @@ class JournalReport(models.AbstractModel):
     def _get_payment_details(self, orders):
         payment_details = {
             'Carte Bancaire': [],
-            'Espèces': [],
+            'Espèces Principe Mall': [],
+            'Espèces AM': [],
+            'Espèces ALCOTT Mall': [],
             'Chèque': [],
             'Chèque MDC':[],
             'Avoir': [],
@@ -63,9 +65,14 @@ class JournalReport(models.AbstractModel):
                     payment_details['Chèque MDC'].append(payment_info)
                 elif method_type == 'Avoir':
                     payment_details['Avoir'].append(payment_info)
+                elif method_type == 'Espèces AM':
+                    payment_details['Espèces AM'].append(payment_info)
 
-                elif method_type == 'Espèces':
-                    payment_details['Espèces'].append(payment_info)
+                elif method_type == 'Espèces Principe Mall':
+                    payment_details['Espèces Principe Mall'].append(payment_info)
+
+                elif method_type == 'Espèces ALCOTT Mall':
+                    payment_details['Espèces ALCOTT Mall'].append(payment_info)
 
 
                 if method.name not in payment_details['totals']:

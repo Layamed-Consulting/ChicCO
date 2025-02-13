@@ -165,9 +165,8 @@
                                 </tbody>
                             </table>
                         </t>
-
-                        <t t-if="payment_details and payment_details.get('Espèces')">
-                            <div class="custom_title">Espèces</div>
+                        <t t-if="payment_details and payment_details.get('Espèces Principe Mall')">
+                            <div class="custom_title">Espèces Principe Mall</div>
                             <table class="table table-sm custom_table">
                                 <thead>
                                     <tr>
@@ -177,7 +176,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="payment_details['Espèces']" t-as="payment">
+                                    <tr t-foreach="payment_details['Espèces Principe Mall']" t-as="payment">
                                         <td><span t-esc="payment['ticket']"/></td>
                                         <td><span t-esc="payment['cashier']"/></td>
                                         <td>
@@ -186,10 +185,72 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><strong>Total Espèces</strong></td>
+                                        <td colspan="2"><strong>Total Espèces Principe Mall</strong></td>
                                         <td>
                                             <strong>
-                                                <span t-esc="payment_details['totals'].get('Espèces', 0)"
+                                                <span t-esc="payment_details['totals'].get('Espèces Principe Mall', 0)"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-if="payment_details and payment_details.get('Espèces AM')">
+                            <div class="custom_title">Espèces Aeronautica Mall</div>
+                            <table class="table table-sm custom_table">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Caissier</th>
+                                        <th>Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="payment_details['Espèces AM']" t-as="payment">
+                                        <td><span t-esc="payment['ticket']"/></td>
+                                        <td><span t-esc="payment['cashier']"/></td>
+                                        <td>
+                                            <span t-esc="payment['amount']"
+                                                  t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><strong>Total Espèces Aeronautica Mall</strong></td>
+                                        <td>
+                                            <strong>
+                                                <span t-esc="payment_details['totals'].get('Espèces AM', 0)"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-if="payment_details and payment_details.get('Espèces ALCOTT Mall')">
+                            <div class="custom_title">Espèces ALCOTT MALL</div>
+                            <table class="table table-sm custom_table">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Caissier</th>
+                                        <th>Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="payment_details['Espèces ALCOTT Mall']" t-as="payment">
+                                        <td><span t-esc="payment['ticket']"/></td>
+                                        <td><span t-esc="payment['cashier']"/></td>
+                                        <td>
+                                            <span t-esc="payment['amount']"
+                                                  t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><strong>Total Espèces ALCOTT MALL</strong></td>
+                                        <td>
+                                            <strong>
+                                                <span t-esc="payment_details['totals'].get('Espèces ALCOTT Mall', 0)"
                                                       t-options='{"widget": "monetary", "display_currency": currency}'/>
                                             </strong>
                                         </td>
