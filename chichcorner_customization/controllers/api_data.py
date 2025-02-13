@@ -1,4 +1,4 @@
-from odoo import http
+from odoo import http, api
 from odoo.http import request
 import json
 from odoo.exceptions import AccessDenied
