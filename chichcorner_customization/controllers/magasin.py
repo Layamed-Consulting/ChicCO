@@ -1,7 +1,8 @@
-from odoo import http, fields, models
+from odoo import http, fields, models,api
 from odoo.http import request
 import json
-
+import odoo
+from odoo.api import SUPERUSER_ID
 
 class APIKey(models.Model):
     _name = 'api.key'
@@ -27,40 +28,64 @@ def validate_api_key(api_key):
 
 class DimensionMagasinAPI(http.Controller):
 
-    @http.route("/api/dimension_magasin", auth='none', type='http', methods=['GET'], csrf=False)
-    def get_dimension_magasin(self, **kwargs):
+    @http.route("/api/<string:db>/dimension_magasin", auth='none', type='http', methods=['GET'], csrf=False)
+    def get_dimension_magasin(self, db, **kwargs):
         try:
-            api_key = request.httprequest.headers.get('Authorization')
 
-            user = validate_api_key(api_key)
-            if not user:
+            if db not in http.db_list():
                 return http.Response(
-                    json.dumps({"error": "Invalid or missing API key"}),
+                    json.dumps({"error": "Invalid database"}),
+                    status=400,
+                    content_type="application/json"
+                )
+
+            registry = odoo.modules.registry.Registry(db)
+
+            api_key = request.httprequest.headers.get('Authorization')
+            if not api_key:
+                return http.Response(
+                    json.dumps({"error": "Missing API key"}),
                     status=401,
                     content_type="application/json"
                 )
 
-            request.update_env(user=user)
+            with registry.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
 
-            magasins = request.env['pos.config'].sudo().search([])
-            magasin_data = []
+                # Validate API key
+                user = validate_api_key(api_key)
+                if not user:
+                    return http.Response(
+                        json.dumps({"error": "Invalid API key"}),
+                        status=401,
+                        content_type="application/json"
+                    )
 
-            for magasin in magasins:
-                basic_employees = magasin.basic_employee_ids
-                advanced_employees = magasin.advanced_employee_ids
+                # Use the environment with the specific database
+                magasins = env['pos.config'].sudo().search([])
+                magasin_data = []
 
-                magasin_data.append({
-                    "magasin_id": magasin.id,
-                    "nom": magasin.name,
-                    "employes_de_base": [employee.name for employee in basic_employees],
-                    "employes_avances": [employee.name for employee in advanced_employees],
-                })
+                for magasin in magasins:
+                    basic_employees = magasin.basic_employee_ids
+                    advanced_employees = magasin.advanced_employee_ids
 
-            return request.make_json_response(magasin_data, status=200)
+                    magasin_data.append({
+                        "magasin_id": magasin.id,
+                        "nom": magasin.name,
+                        "employes_de_base": [employee.name for employee in basic_employees],
+                        "employes_avances": [employee.name for employee in advanced_employees],
+                    })
+
+                return http.Response(
+                    json.dumps(magasin_data),
+                    status=200,
+                    content_type="application/json"
+                )
 
         except Exception as e:
             error_message = f"Error fetching Dimension_magasin: {str(e)}"
-            request.env.cr.rollback()
+            if 'cr' in locals():
+                cr.rollback()
             return http.Response(
                 json.dumps({"error": "anass error", "details": error_message}),
                 status=500,
