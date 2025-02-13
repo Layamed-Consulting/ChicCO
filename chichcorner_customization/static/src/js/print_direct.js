@@ -6,34 +6,59 @@ async function printAttachment(env, action) {
         if (action && action.params && action.params.html) {
             const reportHtml = action.params.html;
 
+
             const userAgent = navigator.userAgent || "";
             const isAndroid = /Android|iPhone|iPad|iPod/i.test(userAgent);
 
-
             const printStyles = `
-                
-                <style>
-                    @media print {
-                        @page {
-                            size: 49mm 29mm;
-                            margin: 0mm;
-                        }
-                        body {
-                            margin: 0;
-                            padding: 5mm;
-                            width: 100%;
-                            height: 100%;
-                        }
-                        .print-content {
-                   
-                            scale: 0.8;
-                            transform-origin: top left;
-                              
-                        }
-                    }
-                </style>
-                
-            `;
+<style>
+    @media print {
+        @page {
+            size: 57mm 32mm;
+            margin: 0;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 57mm;
+            height: 32mm;
+            overflow: hidden;
+        }
+
+        .print-content {
+            width: 57mm;
+            height: 32mm;
+            transform: scale(1);
+            transform-origin: top left;
+        }
+
+        .o_label_sheet {
+            width: 100%;
+            height: 100%;
+        }
+
+        .o_label_name {
+            font-size: 10px;
+            font-weight: bold;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .o_label_small_barcode img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .o_label_price_small {
+            font-size: 12px;
+            font-weight: bold;
+            color: black;
+        }
+    }
+</style>
+`;
+
 
             const modifiedHtml = `
                 ${printStyles}
