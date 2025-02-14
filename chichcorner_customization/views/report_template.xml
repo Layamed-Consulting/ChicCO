@@ -37,9 +37,11 @@
                                     <t t-else="">X</t>
                                 </h2>
                                 <div class="oe_structure"></div>
+                                <!--
                                 <t t-if="session_name">
                                     Session ID: <span t-out="session_name">987657</span>
                                 </t>
+                                -->
                             </t>
                             <br/>
                             <t t-if="date_start and date_stop">
@@ -220,6 +222,68 @@
                                         <td>
                                             <strong>
                                                 <span t-esc="payment_details['totals'].get('Espèces AM', 0)"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-if="payment_details and payment_details.get('Espèces Bkk')">
+                            <div class="custom_title">Espèces BIKKEMBERGS Mall</div>
+                            <table class="table table-sm custom_table">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Caissier</th>
+                                        <th>Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="payment_details['Espèces Bkk']" t-as="payment">
+                                        <td><span t-esc="payment['ticket']"/></td>
+                                        <td><span t-esc="payment['cashier']"/></td>
+                                        <td>
+                                            <span t-esc="payment['amount']"
+                                                  t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><strong>Total Espèces BIKKEMBERGS Mall</strong></td>
+                                        <td>
+                                            <strong>
+                                                <span t-esc="payment_details['totals'].get('Espèces Bkk', 0)"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-if="payment_details and payment_details.get('Banque')">
+                            <div class="custom_title">Banque Aeronautica Militare Mall</div>
+                            <table class="table table-sm custom_table">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Caissier</th>
+                                        <th>Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="payment_details['Banque']" t-as="payment">
+                                        <td><span t-esc="payment['ticket']"/></td>
+                                        <td><span t-esc="payment['cashier']"/></td>
+                                        <td>
+                                            <span t-esc="payment['amount']"
+                                                  t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><strong>Total Banque Aeronautica Militare Mall</strong></td>
+                                        <td>
+                                            <strong>
+                                                <span t-esc="payment_details['totals'].get('Banque', 0)"
                                                       t-options='{"widget": "monetary", "display_currency": currency}'/>
                                             </strong>
                                         </td>
