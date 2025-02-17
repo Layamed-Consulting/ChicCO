@@ -18,7 +18,7 @@ def validate_api_key(api_key):
 #product_list_api -- id existe
 class DimensionProduitAPI(http.Controller):
 
-    @http.route("/api/dimension_produit", auth='none', type='http', methods=['GET'], csrf=False)
+    @http.route("/api/dimension_product", auth='none', type='http', methods=['GET'], csrf=False)
     def get_dimension_produit(self, id_pdt_start=None, id_pdt_end=None, **kwargs):
         try:
             api_key = request.httprequest.headers.get('Authorization')

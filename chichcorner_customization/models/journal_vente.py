@@ -24,6 +24,8 @@ class JournalReport(models.AbstractModel):
             'Carte Bancaire': [],
             'Espèces Principe Mall': [],
             'Espèces AM': [],
+            'Banque': [],
+            'Espèces Bkk': [],
             'Espèces ALCOTT Mall': [],
             'Chèque': [],
             'Chèque MDC':[],
@@ -67,6 +69,12 @@ class JournalReport(models.AbstractModel):
                     payment_details['Avoir'].append(payment_info)
                 elif method_type == 'Espèces AM':
                     payment_details['Espèces AM'].append(payment_info)
+
+                elif method_type == 'Espèces Bkk':
+                    payment_details['Espèces Bkk'].append(payment_info)
+
+                elif method_type == 'Banque':
+                    payment_details['Banque'].append(payment_info)
 
                 elif method_type == 'Espèces Principe Mall':
                     payment_details['Espèces Principe Mall'].append(payment_info)

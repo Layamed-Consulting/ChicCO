@@ -31,6 +31,16 @@ class StockQuant(models.Model):
             'params': {'html': report_html}
         }
 
+    def action_open_label_layout(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'product.label.layout',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_product_ids': self.mapped('product_id').ids,
+            },
+        }
     '''
     def action_print_label(self):
         label_layout = self.env['product.label.layout'].create({
